@@ -1,3 +1,6 @@
+import re
+
+
 class Table(object):
     def __init__(self, database, table):
         self.__database = database
@@ -56,7 +59,13 @@ class FieldType(object):
 
     @property
     def field_comment(self):
-        return self.__comment
+        comment = re.sub(
+            "@(reference)\(([\w\s\d,\-\.\'_]+)\)", "", self.__comment
+        )
+
+        comment = re.sub("\"", "", comment)
+
+        return comment
 
     @property
     def field_metadata(self):

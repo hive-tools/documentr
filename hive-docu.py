@@ -1,4 +1,5 @@
 from documentr.parser import HiveTableParser
+from documentr.document import Document
 
 sql = """
 /**
@@ -36,14 +37,7 @@ LOCATION '/HelloFresh/Databases/fact_tables/errors_reported';
 """
 
 parser = HiveTableParser()
-fields = parser.parse_fields(sql)
-table = parser.parse_table(sql)
-metadata = parser.parse_table_metadata(sql)
+documentr = Document(parser)
+table_data = documentr.create(sql)
 
-print "{} {} ".format(table.database, table.table)
-
-for field in fields:
-    print field.field_metadata
-    exit()
-    print "{} {} {}" .format(field.field_name, field.field_type, field.field_has_comment)
-exit()
+print table_data
