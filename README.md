@@ -24,5 +24,5 @@ LOCATION '/YourCompany/fact_tables/active_customers';
 Generates a JSON file like:
 
 ```json
-{'table': 'active_customers', 'metadata': {'version': '1.0.0', 'description': 'This table creates a fact table with active customers', 'author': 'Sergio Sola'}, 'fields': [{'comment': ' Reference to customer in time', 'type': 'BIGINT', 'name': 'customer_id', 'metadata': {'reference': 'dimensions.customers.customer_sk'}}, {'comment': ' Stores the product SKU', 'type': 'STRING', 'name': 'product', 'metadata': {'reference': 'other_tables.product.sku'}}, {'comment': '', 'type': 'STRING', 'name': 'country', 'metadata': None}], 'database': 'fact_tables'}
+{"table": "active_customers", "metadata": {"version": "1.0.0", "description": "This table creates a fact table with active customers", "author": "Sergio Sola"}, "fields": [{"comment": " Reference to customer in time", "type": "BIGINT", "name": "customer_id", "metadata": {"reference": "dimensions.customers.customer_sk"}}, {"comment": " Stores the product SKU", "type": "STRING", "name": "product", "metadata": {"reference": "other_tables.product.sku"}}, {"comment": "", "type": "STRING", "name": "country", "metadata": null}], "database": "fact_tables"}
 ```
