@@ -6,7 +6,9 @@ NAME = "documentr"
 VERSION = "1.0.0"
 
 REQUIRES = [
-            ]
+    "Jinja2"
+]
+
 setup(
     name=NAME,
     version=VERSION,

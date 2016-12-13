@@ -27,7 +27,7 @@ class HiveTableParser(Parser):
     TABLE_REGEX = "[EXISTS|TABLE|table|exists][\s]+([a-zA-Z0-9_`?]+\.[" \
                 "a-z-A-Z0-9_`?]+)"
     TABLE_METADATA_REGEX = "@(author|description|version)\(\"([\w\s\d,\-\.\'_]+)\"\)"
-    FIELD_METADATA = "@(reference)\(([\w\s\d,\-\.\'_]+)\)"
+    FIELD_METADATA = "@(reference|default)\(([\w\s\d,\-\.\'_]+)\)"
 
     def __init__(self):
         super(HiveTableParser, self).__init__()
@@ -80,11 +80,19 @@ class HiveTableParser(Parser):
 
     def parse_field_metadata(self, comment):
         items = re.findall(self.FIELD_METADATA, comment)
-        allowed_itmes = ['reference']
+        allowed_itmes = ['reference', 'default']
         stored_items = {}
 
         for value in items:
             if value[0] in allowed_itmes:
-                stored_items[value[0]] = value[1]
+                data = value[1]
+                if value[0] == 'reference':
+                    reference_data = value[1].split('.')
+                    data = {
+                        "database": reference_data[0],
+                        "table": reference_data[1],
+                        "field": reference_data[2]
+                    }
+                stored_items[value[0]] = data
 
         return stored_items
