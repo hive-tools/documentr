@@ -1,10 +1,11 @@
 from documentr.parser import HiveTableParser
 from documentr.document import Document
+from documentr.writer import Writer
 
 sql = """
 /**
  * @author("Sergio Sola")
- * @email("ss@hellofresh.com")
+ * @description("This table creates some stuff")
  * @version("1.0.0")
  */
 CREATE EXTERNAL TABLE IF NOT EXISTS fact_tables.errors_reported (
@@ -39,5 +40,5 @@ LOCATION '/HelloFresh/Databases/fact_tables/errors_reported';
 parser = HiveTableParser()
 documentr = Document(parser)
 table_data = documentr.create(sql)
-
+documentr.write(Writer("/tmp"))
 print table_data

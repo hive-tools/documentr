@@ -1,6 +1,7 @@
 class Document(object):
     def __init__(self, table_parser):
         self.table_parser = table_parser
+        self.document = None
 
     def create(self, sql):
         table = self.table_parser.parse_table(sql)
@@ -28,4 +29,11 @@ class Document(object):
                 }
             )
 
-        return document
+        self.document = document
+        return self.document
+
+    def write(self, writer):
+        if not self.document:
+            raise Exception("Document was not generated")
+
+        writer.write(self.document)
