@@ -1,46 +1,59 @@
+import os
+
+from documentr.generator.template import Template
+from argparse import ArgumentParser
 from documentr.parser import HiveTableParser
 from documentr.document import Document
 from documentr.writer import Writer
 from documentr.loader import Loader
-from documentr.generator.template import Template
 
-# sql = """
-# /**
-#  * @author("Sergio Sola")
-#  * @description("This table creates a fact table with active customers")
-#  * @version("1.0.0")
-#  */
-# CREATE EXTERNAL TABLE IF NOT EXISTS fact_tables.active_customers (
-#     customer_id  BIGINT COMMENT "@reference(dimensions.customers.customer_sk) Reference to customer in time",
-#     product STRING COMMENT "@reference(other_tables.product.sku) Stores the product SKU"
-#  )
-#  PARTITIONED BY (country string)
-# STORED AS PARQUET
-# LOCATION '/YourCompany/fact_tables/active_customers';
-# """
 
-sql = """
-/**
- * @author("Sergio Sola")
- * @description("Dimension table displays customer data")
- * @version("0.0.1")
- */
-CREATE EXTERNAL TABLE IF NOT EXISTS dimensions.customers (
-    customer_sk  BIGINT COMMENT "Surrogate key for customer",
-    email STRING COMMENT "Customer email"
- )
-STORED AS PARQUET
-LOCATION '/YourCompany/dimensions/customers';
-"""
-#
-# parser = HiveTableParser()
-# documentr = Document(parser)
-# table_data = documentr.create(sql)
-# documentr.write(Writer("/tmp"))
-# print table_data
+def parse_input_arguments():
+    arg_parser = ArgumentParser()
 
-loader = Loader("/tmp")
-schema = loader.load()
+    arg_parser.add_argument('--path', dest='path',
+                            required=True, help='Define where the SQL files '
+                                                'are located')
 
-template = Template(schema)
-template.generate()
+    arg_parser.add_argument('--engine', dest='engine', default='hive',
+                            required=False, help='Define which database '
+                                                 'engine you are using in '
+                                                 'those queries')
+
+    arg_parser.add_argument('--doc-destination', dest='docs_dest',
+                            required='True', help='Define where the metadata '
+                                                  'and documentation are '
+                                                  'going to be stored')
+
+    arg_parser.add_argument('--template', dest='template', required='False',
+                            default='default', help='Define which template '
+                                                    'you want to use to '
+                                                    'generate the documentation')
+
+    return arg_parser.parse_args()
+
+
+if __name__ == '__main__':
+    args = parse_input_arguments()
+
+    engine_parser = None
+    if args.engine.lower() == 'hive':
+        engine_parser = HiveTableParser()
+
+    # Get all files in the --path directory?
+    file_list = []
+
+    # First step is to create the metadata for a given directory
+    documentr = Document(engine_parser)
+    for _file in file_list:
+        with open(_file) as sql_content:
+            table_data = documentr.create(sql_content)
+            documentr.write(Writer(args.docs_dest))
+
+    # Second step is to generate the HTML documentation from the previous
+    # metadata
+    loader = Loader(args.docs_dest)
+    schema = loader.load()
+
+    template = Template(schema)
+    template.generate()

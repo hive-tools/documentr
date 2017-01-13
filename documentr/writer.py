@@ -6,6 +6,9 @@ class Writer(object):
     def __init__(self, path):
         self.__path = path
 
+        if not os.path.exists(self.__path):
+            raise ValueError("Path {} does not exists".format(self.__path))
+
     def write(self, document):
         json_output = json.dumps(document)
 
