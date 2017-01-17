@@ -1,10 +1,11 @@
 import os
+import fnmatch
 
 from documentr.generator.template import Template
 from argparse import ArgumentParser
 from documentr.parser import HiveTableParser
 from documentr.document import Document
-from documentr.writer import Writer
+from documentr.writer import Writer, TemplateWriter
 from documentr.loader import Loader
 
 
@@ -43,12 +44,17 @@ if __name__ == '__main__':
     # Get all files in the --path directory?
     file_list = []
 
+    for root, dirnames, filenames in os.walk(args.path):
+        for filename in fnmatch.filter(filenames, '*.sql'):
+            file_list.append(os.path.join(root, filename))
+
     # First step is to create the metadata for a given directory
     documentr = Document(engine_parser)
     for _file in file_list:
         with open(_file) as sql_content:
-            table_data = documentr.create(sql_content)
-            documentr.write(Writer(args.docs_dest))
+            table_data = documentr.create(sql_content.read())
+            if table_data:
+                documentr.write(Writer(args.docs_dest))
 
     # Second step is to generate the HTML documentation from the previous
     # metadata
@@ -56,4 +62,7 @@ if __name__ == '__main__':
     schema = loader.load()
 
     template = Template(schema)
-    template.generate()
+    content = template.generate()
+
+    template_writer = TemplateWriter(args.docs_dest)
+    template_writer.write(content)

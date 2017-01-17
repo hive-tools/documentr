@@ -4,7 +4,12 @@ class Document(object):
         self.document = None
 
     def create(self, sql):
-        table = self.table_parser.parse_table(sql)
+        try:
+            table = self.table_parser.parse_table(sql)
+        except Exception, e:
+            print "Something wrong with sql {}".format(sql)
+            return None
+
         table_metadata = self.table_parser.parse_table_metadata(sql)
         fields = self.table_parser.parse_fields(sql)
 
@@ -30,6 +35,7 @@ class Document(object):
             )
 
         self.document = document
+
         return self.document
 
     def write(self, writer):

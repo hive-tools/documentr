@@ -20,4 +20,4 @@ class Template(object):
 
     def generate(self):
         template = self.__template.get_template("index.jinja")
-        print template.render({"schema": self.__schema})
+        return template.render({"schema": self.__schema})

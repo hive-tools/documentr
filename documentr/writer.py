@@ -23,3 +23,19 @@ class Writer(object):
 
         with open(full_path, 'w+') as _file:
             _file.write(json_output)
+
+
+class TemplateWriter(object):
+    def __init__(self, path):
+        self.__path = path
+
+        if not os.path.exists(self.__path):
+            raise ValueError("Path {} does not exists".format(self.__path))
+
+    def write(self, buffer):
+        full_path = os.path.join(
+            self.__path, 'index.html'
+        )
+
+        with open(full_path, 'w+') as _file:
+            _file.write(buffer)
