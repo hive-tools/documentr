@@ -48,6 +48,7 @@ class HiveTableParser(Parser):
         return self.table
 
     def parse_fields(self, sql):
+        self.fields = []
         _fields = re.findall(self.FIELDS_REGEX, sql, re.MULTILINE)
 
         if not _fields:
@@ -66,6 +67,8 @@ class HiveTableParser(Parser):
         return self.fields
 
     def parse_table_metadata(self, sql):
+        self.table_metadata = None
+
         items = re.findall(self.TABLE_METADATA_REGEX, sql)
         allowed_items = ['author', 'version', 'description']
         stored_items = {}

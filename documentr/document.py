@@ -7,7 +7,6 @@ class Document(object):
         try:
             table = self.table_parser.parse_table(sql)
         except Exception, e:
-            print "Something wrong with sql {}".format(sql)
             return None
 
         table_metadata = self.table_parser.parse_table_metadata(sql)
@@ -24,15 +23,16 @@ class Document(object):
             "fields": []
         }
 
-        for field in fields:
-            document["fields"].append(
-                {
-                    "name": field.field_name,
-                    "type": field.field_type,
-                    "comment": field.field_comment,
-                    "metadata": field.field_metadata
-                }
-            )
+        if fields:
+            for field in fields:
+                document["fields"].append(
+                    {
+                        "name": field.field_name,
+                        "type": field.field_type,
+                        "comment": field.field_comment,
+                        "metadata": field.field_metadata
+                    }
+                )
 
         self.document = document
 

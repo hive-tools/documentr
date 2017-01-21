@@ -1,5 +1,6 @@
 import os
 import fnmatch
+import hashlib
 
 from documentr.generator.template import Template
 from argparse import ArgumentParser
@@ -49,12 +50,20 @@ if __name__ == '__main__':
             file_list.append(os.path.join(root, filename))
 
     # First step is to create the metadata for a given directory
-    documentr = Document(engine_parser)
-    for _file in file_list:
-        with open(_file) as sql_content:
-            table_data = documentr.create(sql_content.read())
+    for file_ in file_list:
+        documentr = Document(engine_parser)
+
+        with open(file_) as buffer_:
+            sql_content = buffer_.read()
+            table_data = documentr.create(sql_content)
+
             if table_data:
                 documentr.write(Writer(args.docs_dest))
+                print "File [{}] {} parsed".format(
+                    hashlib.md5(sql_content).hexdigest(), file_
+                )
+
+        buffer_.close()
 
     # Second step is to generate the HTML documentation from the previous
     # metadata
