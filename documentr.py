@@ -1,13 +1,6 @@
-import os
-import fnmatch
-import hashlib
-
-from documentr.generator.template import Template
 from argparse import ArgumentParser
-from documentr.parser import HiveTableParser
-from documentr.document import Document
-from documentr.writer import Writer, TemplateWriter
-from documentr.loader import Loader
+from documentr.metadata_generator import MetadataGenerator
+from documentr.output_generator import OutputGenerator
 
 
 def parse_input_arguments():
@@ -38,40 +31,13 @@ def parse_input_arguments():
 if __name__ == '__main__':
     args = parse_input_arguments()
 
-    engine_parser = None
-    if args.engine.lower() == 'hive':
-        engine_parser = HiveTableParser()
+    metadata_generator = MetadataGenerator(
+        args.path, args.docs_dest
+    )
 
-    # Get all files in the --path directory?
-    file_list = []
-
-    for root, dirnames, filenames in os.walk(args.path):
-        for filename in fnmatch.filter(filenames, '*.sql'):
-            file_list.append(os.path.join(root, filename))
-
-    # First step is to create the metadata for a given directory
-    for file_ in file_list:
-        documentr = Document(engine_parser)
-
-        with open(file_) as buffer_:
-            sql_content = buffer_.read()
-            table_data = documentr.create(sql_content)
-
-            if table_data:
-                documentr.write(Writer(args.docs_dest))
-                print "File [{}] {} parsed".format(
-                    hashlib.md5(sql_content).hexdigest(), file_
-                )
-
-        buffer_.close()
+    metadata_generator.generate(args.engine)
 
     # Second step is to generate the HTML documentation from the previous
     # metadata
-    loader = Loader(args.docs_dest)
-    schema = loader.load()
-
-    template = Template(schema)
-    content = template.generate()
-
-    template_writer = TemplateWriter(args.docs_dest)
-    template_writer.write(content)
+    output_generator = OutputGenerator(args.docs_dest, args.docs_dest)
+    output_generator.generate("web")

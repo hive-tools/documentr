@@ -23,6 +23,7 @@ class Parser:
 
 
 class HiveTableParser(Parser):
+    NAME = "hive"
     FIELDS_REGEX = "([a-zA-Z_]+)\s+(STRING|BIGINT|INT|DOUBLE|string|bigint|int|double)\s?(COMMENT\s)?(\".*\")?"
     TABLE_REGEX = "[EXISTS|TABLE|table|exists][\s]+([a-zA-Z0-9_`?]+\.[" \
                 "a-z-A-Z0-9_`?]+)"
@@ -99,3 +100,10 @@ class HiveTableParser(Parser):
                 stored_items[value[0]] = data
 
         return stored_items
+
+
+class ParserFactory(object):
+    @staticmethod
+    def create_parser(engine=HiveTableParser.NAME):
+        if engine == HiveTableParser.NAME:
+            return HiveTableParser()

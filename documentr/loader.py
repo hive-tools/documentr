@@ -1,13 +1,13 @@
 import json
-from os import listdir
-from os.path import isfile, join, exists
+import fnmatch
+import os
 
 
 class Loader(object):
     def __init__(self, base_path):
         self.__base_path = base_path
 
-        if not exists(self.__base_path):
+        if not os.path.exists(self.__base_path):
             raise ValueError(
                 "Base path {} do not exists".format(self.__base_path)
             )
@@ -30,4 +30,10 @@ class Loader(object):
         return schema
 
     def _list_files(self):
-        return [join(self.__base_path, f) for f in listdir(self.__base_path) if isfile(join(self.__base_path, f))]
+        file_list = []
+
+        for root, dirnames, filenames in os.walk(self.__base_path):
+            for filename in fnmatch.filter(filenames, '*.json'):
+                file_list.append(os.path.join(root, filename))
+
+        return file_list
