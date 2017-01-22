@@ -4,6 +4,13 @@ This package helps you to automate the documentation of your database migrations
 
 ![img](http://i.imgur.com/Y3zHkBK.png)
 
+## TO-DO
+
+- [ ] Differenciate between a table creation and creating a view
+- [ ] Improve error handling, if something cannot be done, why?
+- [ ] Improve Documentr default template, right now it's kind of horrible
+- [ ] Write tests, and then... more tests
+
 ## Supports
 - Hive
 
