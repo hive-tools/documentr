@@ -2,6 +2,8 @@ import json
 import fnmatch
 import os
 
+from collections import defaultdict
+
 
 class Loader(object):
     def __init__(self, base_path):
@@ -19,6 +21,7 @@ class Loader(object):
             return []
 
         schema = {}
+        authors_stats = defaultdict(int)
 
         for _file in files:
             with open(_file, 'r') as _f:
@@ -27,7 +30,13 @@ class Loader(object):
                     schema[json_payload['database']] = []
                 schema[json_payload['database']] += [json_payload]
 
-        return schema
+                # register some author stats
+                author = json_payload['metadata']['author']
+
+                if author:
+                    authors_stats[author] += 1
+
+        return schema, authors_stats
 
     def _list_files(self):
         file_list = []

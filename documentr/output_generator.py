@@ -9,8 +9,9 @@ class OutputGeneratorFactory(object):
         if name == "web":
             template_name = kwargs.get("template")
             output_path = kwargs.get("output_path")
+            author_stats = kwargs.get("author_stats")
 
-            template = Template(schema, template_name)
+            template = Template(schema, template_name, author_stats=author_stats)
             content = template.generate()
 
             template_writer = TemplateWriter(output_path)
@@ -24,8 +25,9 @@ class OutputGenerator(object):
 
     def generate(self, engine="web"):
         loader = Loader(self.input_path)
-        schema = loader.load()
+        schema, author_stats = loader.load()
 
         OutputGeneratorFactory.create_output_generator(
-            engine, schema, template="default", output_path=self.output_path
+            engine, schema, author_stats=author_stats, template="default",
+            output_path=self.output_path
         )

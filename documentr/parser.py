@@ -24,7 +24,9 @@ class Parser:
 
 class HiveTableParser(Parser):
     NAME = "hive"
-    FIELDS_REGEX = "([a-zA-Z_]+)\s+(STRING|BIGINT|INT|DOUBLE|string|bigint|int|double)\s?(COMMENT\s)?(\".*\")?"
+    FIELDS_REGEX = "([a-zA-Z_]+)\s+(" \
+                   "STRING|BIGINT|INT|DOUBLE|BOOLEAN|boolean|string|bigint" \
+                   "|int|double)\s?(COMMENT\s)?(\".*\")?"
     TABLE_REGEX = "[EXISTS|TABLE|table|exists][\s]+([a-zA-Z0-9_`?]+\.[" \
                 "a-z-A-Z0-9_`?]+)"
     TABLE_METADATA_REGEX = "@(author|description|version)\(\"([\w\s\d,\-\.\'_]+)\"\)"
