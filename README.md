@@ -10,6 +10,8 @@ This package helps you to automate the documentation of your database migrations
 - [ ] Improve error handling, if something cannot be done, why?
 - [x] Improve Documentr default template, right now it's kind of horrible
 - [ ] Write tests, and then... more tests
+- [ ] Configure Travis CI to run tests after each commit
+- [ ] Improve documentation :party:
 
 ## Supports
 - Hive
