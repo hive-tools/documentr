@@ -28,6 +28,8 @@ class Loader(object):
                 json_payload = json.loads(_f.read())
                 if json_payload['database'] not in schema:
                     schema[json_payload['database']] = []
+
+                json_payload['metadata']['has_docs'] = self._has_docs(json_payload)
                 schema[json_payload['database']] += [json_payload]
 
                 # register some author stats
@@ -37,6 +39,13 @@ class Loader(object):
                     authors_stats[author] += 1
 
         return schema, authors_stats
+
+    def _has_docs(self, table_schema):
+        if not table_schema['metadata']['author'] and \
+                not table_schema['metadata']['description']:
+            return False
+
+        return True
 
     def _list_files(self):
         file_list = []

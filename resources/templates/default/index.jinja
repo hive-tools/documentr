@@ -116,7 +116,7 @@ h1 {
                   <a class="nav-link" href="#"><strong>{{ database }}</strong></a>
                   <ul>
                       {% for table in schema[database] %}
-                        <li><a href="#" class="table_link" data-id="{{ database }}.{{ table['table'] }}">{{ table['table'] }}</a></li>
+                        <li><a href="#" class="table_link" data-id="{{ database }}.{{ table['table'] }}">{{ table['table'] }} {% if not table['metadata']['has_docs'] %}<span class="badge badge-danger">M</span>{% endif %}</li></a>
                       {% endfor %}
                   </ul>
                 </li>
@@ -145,9 +145,17 @@ h1 {
                 <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3 table-desc" id="{{ database }}.{{ table['table'] }}">
                   <section class="row">
                     <div class="col-12">
+                        {% if not table['metadata']['has_docs'] %}
+                            <div class="alert alert-danger" role="alert">
+                              <strong>Oh snap!</strong> Apparently we do not
+                              have any documentation ready for this table.
+                              Please, get some time and write the docs!
+                            </div>
+                        {% endif %}
                         <div class="card">
                           <div class="card-header">
-                            {{ database }}.{{ table['table'] }} <span class="badge badge-success">{{ table['metadata']['version'] }}</span>
+                            {{ database }}.{{ table['table'] }} <span
+                            class="badge badge-success">{{ table['metadata']['version'] }}</span>
                           </div>
                           <div class="card-block">
                             <h4 class="card-title">Author: {{ table['metadata']['author'] }}</h4>
