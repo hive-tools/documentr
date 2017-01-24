@@ -2,7 +2,7 @@
 
 This package helps you to automate the documentation of your database migrations for creating tables. 
 
-![img](http://i.imgur.com/Y3zHkBK.png)
+![img](http://i.imgur.com/mrLL6gZ.png)
 
 ## TO-DO
 
