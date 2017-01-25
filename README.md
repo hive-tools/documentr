@@ -1,4 +1,4 @@
-# documentr
+# documentr [![Build Status](https://travis-ci.org/ssola/documentr.svg?branch=master)](https://travis-ci.org/ssola/documentr)
 
 This package helps you to automate the documentation of your database migrations for creating tables. 
 
