@@ -15,7 +15,7 @@ And now it supports the table graph representation:
 - [ ] Improve error handling, if something cannot be done, why?
 - [x] Improve Documentr default template, right now it's kind of horrible
 - [ ] Write tests, and then... more tests
-- [ ] Configure Travis CI to run tests after each commit
+- [x] Configure Travis CI to run tests after each commit
 - [ ] Improve documentation :party:
 
 ## Supports
