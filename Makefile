@@ -59,7 +59,7 @@ test: ## run tests quickly with the default Python
 	./runtests
 
 test-all: ## run tests on every Python version with tox
-	tox --recreate
+	tox
 
 coverage: ## check code coverage quickly with the default Python
 
