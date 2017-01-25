@@ -1,3 +1,4 @@
+import os
 from setuptools import setup
 from setuptools import find_packages
 from pip.req import parse_requirements
@@ -6,13 +7,16 @@ NAME = "documentr"
 VERSION = "1.0.0"
 
 try:
-    install_reqs = parse_requirements('requirements.txt', session=False)
-    requirements = [str(ir.req) for ir in install_reqs]
+    requirements = []
+    if os.path.exists('requirements.txt'):
+        install_reqs = parse_requirements('requirements.txt', session=False)
+        requirements = [str(ir.req) for ir in install_reqs]
 except OSError:
     requirements = []
 
 test_requirements = [
-    'pytest'
+    'pytest',
+    'unittest2'
 ]
 
 setup(
