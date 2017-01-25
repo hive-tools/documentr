@@ -44,4 +44,9 @@ class HiveTableParserTest(unittest2.TestCase):
 
         fields = self.hive_parser.parse_fields(self.sql)
 
-        self.assertItemsEqual(expected_value, fields)
+        self.assertEqual(len(expected_value), len(fields))
+
+        for index, item in enumerate(expected_value):
+            self.assertEqual(
+                expected_value[index], fields[index]
+            )
