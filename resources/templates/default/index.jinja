@@ -37,6 +37,10 @@ h1 {
     display: none;
 }
 
+.table-graph {
+    display: none;
+}
+
 /*
  * Sidebar
  */
@@ -153,13 +157,27 @@ h1 {
                             </div>
                         {% endif %}
                         <div class="card">
-                          <div class="card-header">
-                            {{ database }}.{{ table['table'] }} <span
-                            class="badge badge-success">{{ table['metadata']['version'] }}</span>
+                          <div class="card-header table-container">
+                            <ul class="nav nav-pills card-header-pills">
+                              <li class="nav-item">
+                              <a class="nav-link active" href="#"
+                              id="{{database }}-{{table['table']
+                              }}-info-link" data-id="{{database }}-{{table['table'] }}" data-action="info">{{ database}}.{{ table['table']}} <span class="badge badge-success">{{table['metadata']['version'] }}</span></a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" href="#" id="{{database }}-{{table['table'] }}-graph-link" data-id="{{ database }}-{{table['table'] }}" data-action="graph">Graph</a>
+                              </li>
+                            </ul>
                           </div>
                           <div class="card-block">
-                            <h4 class="card-title">Author: {{ table['metadata']['author'] }}</h4>
-                            <p class="card-text">{{ table['metadata']['description'] }}</p>
+                            <div id="{{ database }}-{{ table['table'] }}-info" class="table-data">
+                                <h4 class="card-title">Author: {{
+                                table['metadata']['author'] }}</h4>
+                                <p class="card-text">{{ table['metadata']['description'] }}</p>
+                            </div>
+                            <div id="{{ database}}-{{table['table']}}-graph" class="table-data table-graph">
+                                <img src="graph_img/{{ database }}.{{table['table'] }}.png" class="img-fluid" alt="Responsive image">
+                            </div>
                           </div>
                         </div>
                     </div>
@@ -202,7 +220,26 @@ h1 {
                var id_to_display = $(this).attr('data-id');
                $('.table-desc').hide();
                id_to_display = id_to_display.replace('.', '\\.')
-               $('#'+id_to_display).show()
+               $('#'+id_to_display).show();
+           });
+
+           $('.table-container a.nav-link').click(function(){
+                var data_id = $(this).attr('data-id');
+                var data_action = $(this).attr('data-action');
+
+                if (data_action == "info") {
+                    $('#'+data_id+"-graph").hide();
+                    $('#'+data_id+"-info").show();
+
+                    $('#'+data_id+"-graph-link").removeClass('active');
+                    $('#'+data_id+"-info-link").addClass('active');
+                } else {
+                    $('#'+data_id+"-graph").show();
+                    $('#'+data_id+"-info").hide();
+
+                    $('#'+data_id+"-info-link").removeClass('active');
+                    $('#'+data_id+"-graph-link").addClass('active');
+                }
            });
         });
    </script>
