@@ -19,7 +19,9 @@ And now it supports the table graph representation:
 - [ ] Improve documentation :party:
 
 ## Supports
-- Hive
+- [x] Hive
+- [ ] MySQL
+- [ ] PostgreSQL
 
 ## Example
 ```
