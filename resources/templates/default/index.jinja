@@ -11,6 +11,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <style>
@@ -120,7 +121,7 @@ h1 {
                   <a class="nav-link" href="#"><strong>{{ database }}</strong></a>
                   <ul>
                       {% for table in schema[database] %}
-                        <li><a href="#" class="table_link" data-id="{{ database }}.{{ table['table'] }}">{{ table['table'] }} {% if not table['metadata']['has_docs'] %}<span class="badge badge-danger">M</span>{% endif %}</li></a>
+                        <li><a href="#" class="table_link" data-id="{{ database }}.{{ table['table'] }}">{{ table['table'] }} {% if not table['metadata']['has_docs'] %}<span class="badge badge-danger fa fa-warning"> </span>{% endif %}</li></a>
                       {% endfor %}
                   </ul>
                 </li>
@@ -194,7 +195,15 @@ h1 {
                       <tbody>
                         {% for field in table['fields'] %}
                             <tr>
-                              <td>{{ field['name'] }}</td>
+                              <td>
+                              {% if field['metadata']['reference'] %}
+                                <strong>{{ field['name'] }}</strong> <i
+                                class="fa fa-arrows-h" aria-hidden="true">
+                                <a href="#" class="table_link" data-id="{{field['metadata']['reference']['database']}}.{{field['metadata']['reference']['table']}}">{{field['metadata']['reference']['database']}}.{{field['metadata']['reference']['table']}}.{{field['metadata']['reference']['field']}}</a></i>
+                              {% else %}
+                                {{ field['name'] }}
+                              {% endif %}
+                              </td>
                               <td>{{ field['type'] }}</td>
                               <td>{{ field['comment'] }}</td>
                             </tr>
@@ -221,6 +230,7 @@ h1 {
                $('.table-desc').hide();
                id_to_display = id_to_display.replace('.', '\\.')
                $('#'+id_to_display).show();
+               window.location.hash = '#food';
            });
 
            $('.table-container a.nav-link').click(function(){
