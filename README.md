@@ -1,16 +1,21 @@
-# documentr
+# documentr [![Build Status](https://travis-ci.org/ssola/documentr.svg?branch=master)](https://travis-ci.org/ssola/documentr)
 
 This package helps you to automate the documentation of your database migrations for creating tables. 
 
 ![img](http://i.imgur.com/mrLL6gZ.png)
 
+And now it supports the table graph representation:
+
+![img](http://i.imgur.com/ZbBxidK.png)
+
 ## TO-DO
 
 - [ ] Differenciate between a table creation and creating a view
+- [x] Create a basic graph representing each table relationships
 - [ ] Improve error handling, if something cannot be done, why?
 - [x] Improve Documentr default template, right now it's kind of horrible
 - [ ] Write tests, and then... more tests
-- [ ] Configure Travis CI to run tests after each commit
+- [x] Configure Travis CI to run tests after each commit
 - [ ] Improve documentation :party:
 
 ## Supports
