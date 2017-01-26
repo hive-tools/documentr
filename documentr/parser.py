@@ -25,7 +25,8 @@ class Parser:
 class HiveTableParser(Parser):
     NAME = "hive"
     FIELDS_REGEX = "([a-zA-Z_]+)\s+(" \
-                   "STRING|BIGINT|INT|DOUBLE|BOOLEAN|boolean|string|bigint" \
+                   "STRING|BIGINT|INT|DOUBLE|BOOLEAN|TINYINT|tinyint|boolean" \
+                   "|string|bigint" \
                    "|int|double)\s?(COMMENT\s)?(\".*\")?"
     TABLE_REGEX = "[EXISTS|TABLE|table|exists][\s]+([a-zA-Z0-9_`?]+\.[" \
                 "a-z-A-Z0-9_`?]+)"
@@ -86,11 +87,11 @@ class HiveTableParser(Parser):
 
     def parse_field_metadata(self, comment):
         items = re.findall(self.FIELD_METADATA, comment)
-        allowed_itmes = ['reference', 'default']
+        allowed_items = ['reference', 'default', 'example']
         stored_items = {}
 
         for value in items:
-            if value[0] in allowed_itmes:
+            if value[0] in allowed_items:
                 data = value[1]
                 if value[0] == 'reference':
                     reference_data = value[1].split('.')

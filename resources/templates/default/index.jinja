@@ -53,7 +53,7 @@ h1 {
   left: 0;
   z-index: 1000;
   padding: 20px;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
   border-right: 1px solid #eee;
 }
@@ -114,14 +114,14 @@ h1 {
 
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+        <nav class="col-sm-4 col-md-2 hidden-xs-down bg-faded sidebar">
           <ul class="nav nav-pills flex-column">
             {% for database in schema %}
                 <li class="nav-item">
                   <a class="nav-link" href="#"><strong>{{ database }}</strong></a>
                   <ul>
                       {% for table in schema[database] %}
-                        <li><a href="#" class="table_link" data-id="{{ database }}.{{ table['table'] }}">{{ table['table'] }} {% if not table['metadata']['has_docs'] %}<span class="badge badge-danger fa fa-warning"> </span>{% endif %}</li></a>
+                        <li><a href="#" class="table_link" data-id="{{ database }}-{{ table['table'] }}">{{ table['table'] }} {% if not table['metadata']['has_docs'] %}<span class="badge badge-danger fa fa-warning"> </span>{% endif %}</li></a>
                       {% endfor %}
                   </ul>
                 </li>
@@ -129,7 +129,7 @@ h1 {
           </ul>
         </nav>
 
-        <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3 table-desc" id="stats">
+        <main class="col-sm-8 offset-sm-3 col-md-10 offset-md-2 pt-3 table-desc" id="stats">
             <section class="row">
                 <div class="col-12">
                     <h2>Author Stats</h2>
@@ -147,7 +147,7 @@ h1 {
 
         {% for database in schema %}
             {% for table in schema[database] %}
-                <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3 table-desc" id="{{ database }}.{{ table['table'] }}">
+                <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3 table-desc" id="{{ database }}-{{ table['table'] }}">
                   <section class="row">
                     <div class="col-12">
                         {% if not table['metadata']['has_docs'] %}
@@ -189,6 +189,7 @@ h1 {
                         <tr>
                           <th>Field name</th>
                           <th>Field Type</th>
+                          <th>Example</th>
                           <th>Description</th>
                         </tr>
                       </thead>
@@ -205,6 +206,7 @@ h1 {
                               {% endif %}
                               </td>
                               <td>{{ field['type'] }}</td>
+                              <td>{{ field['example'] }}</td>
                               <td>{{ field['comment'] }}</td>
                             </tr>
                          {% endfor %}
@@ -225,12 +227,18 @@ h1 {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            if(window.location.hash) {
+                $('.table-desc').hide();
+                id_to_display = window.location.hash.replace('.', '\.');
+                $(window.location.hash).show();
+            }
+
            $('.table_link').click(function() {
                var id_to_display = $(this).attr('data-id');
                $('.table-desc').hide();
-               id_to_display = id_to_display.replace('.', '\\.')
                $('#'+id_to_display).show();
-               window.location.hash = '#food';
+               event.preventDefault();
+               window.location.hash = '#' + id_to_display;
            });
 
            $('.table-container a.nav-link').click(function(){
