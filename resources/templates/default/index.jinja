@@ -200,13 +200,16 @@ h1 {
                               {% if field['metadata']['reference'] %}
                                 <strong>{{ field['name'] }}</strong> <i
                                 class="fa fa-arrows-h" aria-hidden="true">
-                                <a href="#" class="table_link" data-id="{{field['metadata']['reference']['database']}}.{{field['metadata']['reference']['table']}}">{{field['metadata']['reference']['database']}}.{{field['metadata']['reference']['table']}}.{{field['metadata']['reference']['field']}}</a></i>
+                                <a href="#" class="table_link" data-id="{{field['metadata']['reference']['database']}}-{{field['metadata']['reference']['table']}}">{{field['metadata']['reference']['database']}}.{{field['metadata']['reference']['table']}}.{{field['metadata']['reference']['field']}}</a></i>
                               {% else %}
                                 {{ field['name'] }}
                               {% endif %}
                               </td>
                               <td>{{ field['type'] }}</td>
-                              <td>{{ field['example'] }}</td>
+                              <td>
+                              {% if field['metadata']['example'] %}
+                                {{ field['metadata']['example'] }}
+                                {% endif %}</td>
                               <td>{{ field['comment'] }}</td>
                             </tr>
                          {% endfor %}

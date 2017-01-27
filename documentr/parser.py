@@ -31,7 +31,7 @@ class HiveTableParser(Parser):
     TABLE_REGEX = "[EXISTS|TABLE|table|exists][\s]+([a-zA-Z0-9_`?]+\.[" \
                 "a-z-A-Z0-9_`?]+)"
     TABLE_METADATA_REGEX = "@(author|description|version)\(\"([\w\s\d,\-\.\'_]+)\"\)"
-    FIELD_METADATA = "@(reference|default)\(([\w\s\d,\-\.\'_]+)\)"
+    FIELD_METADATA = "@(reference|default|example)\(([\w\s\d,\-\.\'_]+)\)"
 
     def __init__(self):
         super(HiveTableParser, self).__init__()

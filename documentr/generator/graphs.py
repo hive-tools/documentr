@@ -16,11 +16,15 @@ class GraphGenerator(object):
                 graph = pydot.Dot(graph_type='digraph')
                 main_node_name = "{}.{}".format(database, table['table'])
                 graph.add_node(
-                    pydot.Node(main_node_name, style="filled", fillcolor="#CCCCCC")
+                    pydot.Node(main_node_name, style="filled",
+                               fillcolor="#CCCCCC")
                 )
 
                 for field in table['fields']:
                     if not field['metadata']:
+                        continue
+
+                    if 'reference' not in field['metadata']:
                         continue
 
                     related_table = "{}.{}".format(
@@ -29,12 +33,20 @@ class GraphGenerator(object):
                     )
 
                     graph.add_node(
-                        pydot.Node(related_table, style="filled", fillcolor="#FFFFFF")
+                        pydot.Node(related_table, style="filled",
+                                   fillcolor="#FFFFFF")
                     )
 
                     # add relationship
+                    relationship = "{} -> {}".format(
+                        field['name'],
+                        field['metadata']['reference']['field']
+                    )
+
                     graph.add_edge(
-                        pydot.Edge(main_node_name, related_table)
+                        pydot.Edge(
+                            main_node_name, related_table, label=relationship
+                        )
                     )
 
                     full_path = os.path.join(

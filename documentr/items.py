@@ -66,7 +66,8 @@ class FieldType(object):
     @property
     def field_comment(self):
         comment = re.sub(
-            "@(reference|default)\(([\w\s\d,\-\.\'_]+)\)", "", self.__comment
+            "@(reference|default|example)\(([\w\s\d,\-\.\'_]+)\)", "",
+            self.__comment
         )
 
         comment = re.sub("\"", "", comment).strip()
